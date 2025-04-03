@@ -17,7 +17,8 @@ function addNewTask(){ // Função que adiciona o 'valor' digitado no campo inpu
     myList.push({
         title: taskTitle,
         description: taskDescription,
-        complete: false
+        complete: false,
+        editing: false
 })
 
 
@@ -28,26 +29,34 @@ function addNewTask(){ // Função que adiciona o 'valor' digitado no campo inpu
 }
 
 function showTasks(){ //Função mostrar cada tarefa da lista
-
     let newLi = ''
 
     myList.forEach((item, position1) => { //Lê item por item no array
-        newLi = newLi + `
-
+        newLi +=  `
             <li class="task ${item.complete && "done"}">   
                 <div>
-                    <h3>${item.title}</h3>
-                    <p>${item.description}</p>
+                    ${
+                        item.editing
+                            ? `
+                                <input type="text" id="editTitle-${position1}" value="${item.title}">
+                                <textarea id="editDescription-${position1}">${item.description}</textarea>
+                                <button onclick="saveEdit(${position1})">Salvar</button>
+                                <button onclick="cancelEdit(${position1})">Cancelar</button>
+                            `
+                            : `
+                                <h3>${item.title}</h3>
+                                <p>${item.description}</p>
+                            `
+                    }
                 </div>
-                    <img src="./img/confirm1.png" alt="check-na-tarefa" onclick="completeTask(${position1})">
-                    <img src="./img/delete1.png" alt="tarefa-para-lixo" onclick="deleteItem(${position1})">
-            </li>
-
-            `
+                <img src="./img/confirm1.png" alt="check-na-tarefa" onclick="completeTask(${position1})">
+                <img src="./img/edit-icon.png" alt="editar-tarefa" onclick="editTask(${position1})">
+                <img src="./img/delete1.png" alt="tarefa-para-lixo" onclick="deleteItem(${position1})">
+            </li>            
+        `
     }) 
 
     listComplete.innerHTML = newLi
-
     localStorage.setItem('list', JSON.stringify(myList)) //JSON.stringfy transforma objeto em string
 }
 
@@ -70,6 +79,34 @@ function rechargeTask(){
 
     showTasks()
 }
+
+function editTask(position1){
+    myList[position1].editing=true
+    showTasks()
+}
+
+function cancelEdit(position1){
+    myList[position1].editing=false
+    showTasks()
+}
+
+function saveEdit(position1) {
+    // Obter os valores dos inputs
+    const newTitle = document.getElementById(`editTitle-${position1}`).value;
+    const newDescription = document.getElementById(`editDescription-${position1}`).value;
+  
+    // Atualizar o array myList
+    myList[position1].title = newTitle;
+    myList[position1].description = newDescription;
+  
+    // Desativar o modo de edição
+    myList[position1].editing = false;
+  
+    // Atualizar a exibição
+    showTasks();
+  }
+
+
 
 rechargeTask()
 button.addEventListener('click', addNewTask) // Atribuindo 'valor' da nova tarefa ao clicar.

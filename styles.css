@@ -10,24 +10,30 @@
 
 body{ /* Estabelece a imagem de fundo e parâmetros.*/
     background: url("./img/backgroud.jpg");
-    background-size: auto;
+    background-size: cover;
     background-position: top;
 
 }
 
-nav {
+nav { /* Barra superior */
     width: 100%;
     text-align: center;
 }
 
-li{
+li{  /* Link da barra superior */
     list-style: none;
     display: inline-block;
     margin: 5px;
     margin-right: 10px;
 }
 
-.navBox{
+img { /* Parâmetros para do icone 'Confirmar', 'Deletar' e 'Editar'.*/
+    height: 30px;
+    
+}
+
+
+.navBox{ /* Caixa da barra superior */
     display: flex;
     box-shadow: 1px 4px 10px rgba(53, 53, 53, 3.2);
     width: 500px;
@@ -38,26 +44,26 @@ li{
     flex-direction: column;
 }
 
-.nav-link {
+.nav-link { /* Inf. link da barra superior */
     cursor: pointer;
     text-decoration: none;
     color: #000;
     font-size: 14px;
 }
 
-.nav-link:hover{
+.nav-link:hover{ /* Inf. link da barra superior Cursor */
     color:#e65f05;
     box-shadow: 0px 1px 0px #dd722a;
 }
 
-.nav-link:active{
+.nav-link:active{ /* Inf. link da barra superior Click */
     position: relative;
     opacity: 0.9;
     
     top: 1px;
 }
 
-.input-container {
+.input-container { /* Caixa de input (título e descrição) */
     display: flex;
     box-shadow: 1px 4px 10px rgba(53, 53, 53, 3.2);
     width: 500px;
@@ -68,7 +74,7 @@ li{
     flex-direction: column;
 }
 
-.box-tasks {
+.box-tasks { /* Caixa de input (tarefas) */
     display: flex;
     box-shadow: 1px 4px 10px rgba(53, 53, 53, 3.2);
     width: 500px;
@@ -80,7 +86,7 @@ li{
 }
 
 .input-title,
-.input-description {
+.input-description { /* Input título e descrição */
     border: none;
     border-radius: 5px;
     padding-left: 10px;
@@ -88,19 +94,19 @@ li{
     opacity: 60%;
 }
 
-.input-title {
+.input-title { /* Parâmetros input título */
     width: 100%; /* Ajuste a largura para acomodar o botão */
     height: 40px;
 }
 
-.input-description {
-    width: 100%; /* Mesma largura do título */
+.input-description { /* Parâmetros input descrição */
+    width: 100%;
     height: 80px;
     resize: vertical;
     
 }
 
-.button-add-task { /* Parâmetros para o botão 'Adicionar'.*/
+.button-add-task { /* Parâmetros botão 'Adicionar'.*/
     position: relative;
     box-shadow: 0px 5px 0px #83594d;
     border: solid 1px #c95c3b;
@@ -111,17 +117,17 @@ li{
     color: #ffffff;
     font-size: 17px;
     padding: 0 15px;
-    float: right; /* Joga o objeto para o lado direito.*/
-    cursor: pointer; /* Estabelece o tipo do cursor.*/
+    float: right;
+    cursor: pointer;
     font-weight: 700;
     align-self: flex-end;
 }
 
-.button-add-task:hover { /* Ao passar o cursor, altera a opacidade do botão 'Adicionar'.*/
+.button-add-task:hover { /* Opacidade do botão 'Adicionar' ao passar o cursor .*/
     background-color: #ec7221; 
 }
 
-.button-add-task:active { /*Ao clicar no botão 'Adicionar', altera a opacidade e faz o efeito de click.*/
+.button-add-task:active { /*Efeito de click no botão 'Adicionar'.*/
     position: relative;
     opacity: 0.6;
     box-shadow: 0px 1px 0px #772b08;
@@ -133,7 +139,59 @@ li{
     width: 100%;
     height: auto;
     list-style: none;
-    margin-top: 25px;
+    margin-top: 20px;
+}
+
+
+
+.task input[type="text"],   /* Parâmetros para editar input.*/
+.task textarea{
+    width: 100%;
+    padding: 8px;
+    margin-top: 10px;
+    border-bottom: 8px;
+    border: none;
+    border-radius: 5px;
+    box-sizing: border-box;
+    resize: vertical;
+}
+
+
+
+.task button:last-child { /* ?????????????????????????? */
+    margin-right: 0;
+}
+
+.task button:nth-child(3) { /* Parâmetros do botão salvar do editor input.*/
+    box-shadow: 0px 5px 0px #83594d;
+    border: solid 1px #c95c3b;
+    border-radius: 5px;
+    height: 20px;
+    width: 100px;
+    background-color: #e65f05;
+    color: #ffffff;
+    font-size: 15px;
+    padding: 0 15px;
+    float: left;
+    cursor: pointer;
+    font-weight: 700;
+    align-self: flex-end;
+}
+
+.task button:nth-child(4) {  /* Parâmetros do botão cancelar do editor input.*/
+    box-shadow: 0px 5px 0px #83594d;
+    border: solid 1px #c95c3b;
+    border-radius: 5px;
+    height: 20px;
+    width: 100px;
+    background-color: #e65f05;
+    color: #ffffff;
+    font-size: 15px;
+    padding: 0 15px;
+    float: right;
+    cursor: pointer;
+    font-weight: 700;
+    align-self: flex-end;
 }
 
 .task { /* Parâmetros para cada item da lista.*/
@@ -147,14 +205,14 @@ li{
     margin-bottom: 20px;
     cursor: pointer;
     padding: 10 15px;
-
+    
 }
 
-.task div {
-    flex-grow: 1; /* Permite que o div com título e descrição cresça para ocupar o espaço disponível */
+.task div {  /* Parâmetros para cada item da lista.*/
+    flex-grow: 1; /* Permite a caixa do título/descrição cresça para ocupar o espaço disponível */
     margin-left: 10px; /* Adicione margem à esquerda para separar da imagem */
     margin-right: 10px; /* Adicione margem à direita para separar da imagem */
-    max-width: calc(100% - 100px); /* Definir largura máxima para o texto */
+    max-width: calc(100% - 130px); /* Definir largura máxima para o texto */
   }
 
 .task h3 {
@@ -165,7 +223,7 @@ li{
 }
 
 .task p {
-    margin: 5px 0 0;
+    margin: 5px 0 10px;
     font-size: 0.9em; /* Ajuste o tamanho da fonte da descrição */
     color: #474747; /* Cor da descrição */
     word-wrap: break-word;
@@ -173,25 +231,15 @@ li{
 
 }
 
-
-img { /* Parâmetros para do icone 'Confirmar' e 'Deletar'.*/
-    height: 40px;
-}
-
-
-.task img[alt="check-na-tarefa"]:hover { /* Cria um efeito ao passar o cursor*/
-    transform: scale(90%); 
-    filter: brightness(1.2) saturate(2);
-    box-shadow: 0px 0px 1px 4px #b94610;
-}
-
-.task img[alt="tarefa-para-lixo"]:hover { /* Cria um efeito ao passar o cursor*/
-    transform: scale(90%); 
-    box-shadow: 0px 0px 1px 4px #141414;
-}
-
 .task img {
-    align-self: baseline;
+    align-items: baseline;
+    
+
+}
+
+.task img:hover { /* Cria um efeito ao passar o cursor*/
+    transform: scale(120%); 
+    
 }
 
 .done { /* Adiciona a cor verde e linha na tarefa concluída. */
@@ -211,7 +259,7 @@ img { /* Parâmetros para do icone 'Confirmar' e 'Deletar'.*/
     .box-tasks {
         width: 400px;
     }
-    
+
     .container {
         width: 90%; /* Ajuste a largura do contêiner para telas menores */
     }
@@ -222,5 +270,11 @@ img { /* Parâmetros para do icone 'Confirmar' e 'Deletar'.*/
   
     .button-add-task {
         width: 50%; /* Ajuste a largura do botão para telas menores */
+    }
+
+    .task input[type="text"],
+    .task textarea,
+    .task button {
+        width: 100%;
     }
   }
