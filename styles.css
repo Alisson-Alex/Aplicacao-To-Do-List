@@ -1,0 +1,226 @@
+*{ /* Ações para todos os objetos. */
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Roboto", sans-serif;
+    outline: none;
+}
+
+
+
+body{ /* Estabelece a imagem de fundo e parâmetros.*/
+    background: url("./img/backgroud.jpg");
+    background-size: auto;
+    background-position: top;
+
+}
+
+nav {
+    width: 100%;
+    text-align: center;
+}
+
+li{
+    list-style: none;
+    display: inline-block;
+    margin: 5px;
+    margin-right: 10px;
+}
+
+.navBox{
+    display: flex;
+    box-shadow: 1px 4px 10px rgba(53, 53, 53, 3.2);
+    width: 500px;
+    border-radius: 10px;
+    padding: 5px;
+    margin: 10px auto 0;
+    background-color: #d1d1d1ce;
+    flex-direction: column;
+}
+
+.nav-link {
+    cursor: pointer;
+    text-decoration: none;
+    color: #000;
+    font-size: 14px;
+}
+
+.nav-link:hover{
+    color:#e65f05;
+    box-shadow: 0px 1px 0px #dd722a;
+}
+
+.nav-link:active{
+    position: relative;
+    opacity: 0.9;
+    
+    top: 1px;
+}
+
+.input-container {
+    display: flex;
+    box-shadow: 1px 4px 10px rgba(53, 53, 53, 3.2);
+    width: 500px;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 10px auto 0;
+    background-color: #d1d1d1ce;
+    flex-direction: column;
+}
+
+.box-tasks {
+    display: flex;
+    box-shadow: 1px 4px 10px rgba(53, 53, 53, 3.2);
+    width: 500px;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 10px auto 0;
+    background-color: #d1d1d1ce;
+    flex-direction: column;
+}
+
+.input-title,
+.input-description {
+    border: none;
+    border-radius: 5px;
+    padding-left: 10px;
+    margin-bottom: 10px;
+    opacity: 60%;
+}
+
+.input-title {
+    width: 100%; /* Ajuste a largura para acomodar o botão */
+    height: 40px;
+}
+
+.input-description {
+    width: 100%; /* Mesma largura do título */
+    height: 80px;
+    resize: vertical;
+    
+}
+
+.button-add-task { /* Parâmetros para o botão 'Adicionar'.*/
+    position: relative;
+    box-shadow: 0px 5px 0px #83594d;
+    border: solid 1px #c95c3b;
+    border-radius: 5px;
+    height: 40px;
+    width: 100px;
+    background-color: #e65f05;
+    color: #ffffff;
+    font-size: 17px;
+    padding: 0 15px;
+    float: right; /* Joga o objeto para o lado direito.*/
+    cursor: pointer; /* Estabelece o tipo do cursor.*/
+    font-weight: 700;
+    align-self: flex-end;
+}
+
+.button-add-task:hover { /* Ao passar o cursor, altera a opacidade do botão 'Adicionar'.*/
+    background-color: #ec7221; 
+}
+
+.button-add-task:active { /*Ao clicar no botão 'Adicionar', altera a opacidade e faz o efeito de click.*/
+    position: relative;
+    opacity: 0.6;
+    box-shadow: 0px 1px 0px #772b08;
+    top: 5px;
+}
+
+.list-tasks { /* Parâmetros para a lista.*/
+    resize: vertical;
+    width: 100%;
+    height: auto;
+    list-style: none;
+    margin-top: 25px;
+}
+
+.task { /* Parâmetros para cada item da lista.*/
+    background-color: #ffffffa6;
+    box-shadow: 1px 4px 10px rgba(0, 0, 0, 0.2);
+    min-height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    padding: 10 15px;
+
+}
+
+.task div {
+    flex-grow: 1; /* Permite que o div com título e descrição cresça para ocupar o espaço disponível */
+    margin-left: 10px; /* Adicione margem à esquerda para separar da imagem */
+    margin-right: 10px; /* Adicione margem à direita para separar da imagem */
+    max-width: calc(100% - 100px); /* Definir largura máxima para o texto */
+  }
+
+.task h3 {
+    margin: 0;
+    font-size: 1.1em; /* Ajuste o tamanho da fonte do título */
+    word-wrap: break-word; /* Adicionado para garantir quebra em todos os navegadores */
+    overflow-wrap: break-word; /* Adicionado para garantir quebra em todos os navegadores */
+}
+
+.task p {
+    margin: 5px 0 0;
+    font-size: 0.9em; /* Ajuste o tamanho da fonte da descrição */
+    color: #474747; /* Cor da descrição */
+    word-wrap: break-word;
+    overflow-wrap: break-word; /* Adicionado para garantir quebra em todos os navegadores */
+
+}
+
+
+img { /* Parâmetros para do icone 'Confirmar' e 'Deletar'.*/
+    height: 40px;
+}
+
+
+.task img[alt="check-na-tarefa"]:hover { /* Cria um efeito ao passar o cursor*/
+    transform: scale(90%); 
+    filter: brightness(1.2) saturate(2);
+    box-shadow: 0px 0px 1px 4px #b94610;
+}
+
+.task img[alt="tarefa-para-lixo"]:hover { /* Cria um efeito ao passar o cursor*/
+    transform: scale(90%); 
+    box-shadow: 0px 0px 1px 4px #141414;
+}
+
+.task img {
+    align-self: baseline;
+}
+
+.done { /* Adiciona a cor verde e linha na tarefa concluída. */
+    filter: opacity(60%);
+    text-decoration: line-through;
+}
+
+@media (max-width: 600px) {
+    .navBox{
+        width: 400px;
+    }
+
+    .input-container {
+        width: 400px;
+    }
+
+    .box-tasks {
+        width: 400px;
+    }
+    
+    .container {
+        width: 90%; /* Ajuste a largura do contêiner para telas menores */
+    }
+  
+    .input-task {
+        width: 100%; /* Ajuste a largura do campo de entrada para telas menores */
+    }
+  
+    .button-add-task {
+        width: 50%; /* Ajuste a largura do botão para telas menores */
+    }
+  }
