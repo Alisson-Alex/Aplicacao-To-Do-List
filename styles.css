@@ -276,5 +276,6 @@ img { /* Parâmetros para do icone 'Confirmar', 'Deletar' e 'Editar'.*/
     .task textarea,
     .task button {
         width: 100%;
+        
     }
   }
