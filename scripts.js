@@ -4,7 +4,7 @@ const taskDescriptionInput = document.getElementById('taskDescription');
 const listComplete = document.querySelector('.list-tasks');
 
 // URLs da API
-const API_URL = 'PHP/tasks.php';
+const API_URL = 'php/tasks.php';
 
 // Função para fazer requisições à API
 async function fetchData(url, method = 'GET', data = null) {
