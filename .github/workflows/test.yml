@@ -1,0 +1,41 @@
+name: Test PHP Application
+
+on: [push]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    services:
+      mysql:
+        image: mysql:5.7
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: todo_list
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Set up PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.0'
+    
+    - name: Install dependencies
+      run: |
+        sudo apt-get install -y mysql-client
+        mysql --host 127.0.0.1 --port 3306 -uroot -proot -e "CREATE DATABASE IF NOT EXISTS todo_list;"
+        mysql --host 127.0.0.1 --port 3306 -uroot -proot todo_list < setup.sql
+    
+    - name: Run tests
+      env:
+        MYSQL_HOST: 127.0.0.1
+        MYSQL_DATABASE: todo_list
+        MYSQL_USER: root
+        MYSQL_PASSWORD: root
+      run: |
+        php -S localhost:8000 -t . &
+        curl http://localhost:8000
