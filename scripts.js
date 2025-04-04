@@ -1,47 +1,74 @@
-const button = document.querySelector('.button-add-task') // document sempre se refere ao arquivo html
-const taskTitleinput = document.getElementById('taskTitle')
-const taskDescriptionInput = document.getElementById('taskDescription')
-const listComplete = document.querySelector('.list-tasks')
+const button = document.querySelector('.button-add-task');
+const taskTitleinput = document.getElementById('taskTitle');
+const taskDescriptionInput = document.getElementById('taskDescription');
+const listComplete = document.querySelector('.list-tasks');
 
-let myList = []
+// URLs da API
+const API_URL = 'tasks.php';
 
-function addNewTask(){ // Função que adiciona o 'valor' digitado no campo input e a informação inconcluída.
-    const taskTitle = taskTitleinput.value.trim()  // trim() remove espaços em branco extras
-    const taskDescription = taskDescriptionInput.value.trim()
-
-    if (taskTitle === ''){ // Verifica se taskValue esta vazio após a remoção dos espaços, se vazio emite um alerta
-        alert('Por favor, insira um título para a tarefa.')
-        return
+// Função para fazer requisições à API
+async function fetchData(url, method = 'GET', data = null) {
+    const options = {
+        method,
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    };
+    
+    if (data) {
+        options.body = JSON.stringify(data);
     }
     
-    myList.push({
-        title: taskTitle,
-        description: taskDescription,
-        complete: false,
-        editing: false
-})
-
-
-    taskTitleinput.value = ''
-    taskDescriptionInput.value = ''
-
-    showTasks()
+    try {
+        const response = await fetch(url, options);
+        return await response.json();
+    } catch (error) {
+        console.error('Erro na requisição:', error);
+        return null;
+    }
 }
 
-function showTasks(){ //Função mostrar cada tarefa da lista
-    let newLi = ''
+// Adicionar nova tarefa
+async function addNewTask() {
+    const taskTitle = taskTitleinput.value.trim();
+    const taskDescription = taskDescriptionInput.value.trim();
 
-    myList.forEach((item, position1) => { //Lê item por item no array
-        newLi +=  `
-            <li class="task ${item.complete && "done"}">   
+    if (taskTitle === '') {
+        alert('Por favor, insira um título para a tarefa.');
+        return;
+    }
+    
+    const newTask = await fetchData(API_URL, 'POST', {
+        title: taskTitle,
+        description: taskDescription
+    });
+    
+    if (newTask) {
+        taskTitleinput.value = '';
+        taskDescriptionInput.value = '';
+        showTasks();
+    }
+}
+
+// Mostrar tarefas
+async function showTasks() {
+    const tasks = await fetchData(API_URL);
+    
+    if (!tasks) return;
+    
+    let newLi = '';
+    
+    tasks.forEach((item) => {
+        newLi += `
+            <li class="task ${item.complete && "done"}" data-id="${item.id}">   
                 <div>
                     ${
                         item.editing
                             ? `
-                                <input type="text" id="editTitle-${position1}" value="${item.title}">
-                                <textarea id="editDescription-${position1}">${item.description}</textarea>
-                                <button onclick="saveEdit(${position1})">Salvar</button>
-                                <button onclick="cancelEdit(${position1})">Cancelar</button>
+                                <input type="text" id="editTitle-${item.id}" value="${item.title}">
+                                <textarea id="editDescription-${item.id}">${item.description}</textarea>
+                                <button onclick="saveEdit(${item.id})">Salvar</button>
+                                <button onclick="cancelEdit(${item.id})">Cancelar</button>
                             `
                             : `
                                 <h3>${item.title}</h3>
@@ -49,76 +76,83 @@ function showTasks(){ //Função mostrar cada tarefa da lista
                             `
                     }
                 </div>
-                <img src="./img/confirm1.png" alt="check-na-tarefa" onclick="completeTask(${position1})">
-                <img src="./img/edit-icon.png" alt="editar-tarefa" onclick="editTask(${position1})">
-                <img src="./img/delete1.png" alt="tarefa-para-lixo" onclick="deleteItem(${position1})">
+                <img src="./img/confirm1.png" alt="check-na-tarefa" onclick="completeTask(${item.id}, ${item.complete})">
+                <img src="./img/edit-icon.png" alt="editar-tarefa" onclick="editTask(${item.id})">
+                <img src="./img/delete1.png" alt="tarefa-para-lixo" onclick="deleteItem(${item.id})">
             </li>            
-        `
-    }) 
-
-    listComplete.innerHTML = newLi
-    localStorage.setItem('list', JSON.stringify(myList)) //JSON.stringfy transforma objeto em string
+        `;
+    });
+    
+    listComplete.innerHTML = newLi;
 }
 
-function completeTask(position1){ // Funçao que informa ao usuário que a tarefa foi concluida ou não, invertendo seu valor.
-    myList[position1].complete = !myList[position1].complete
-    showTasks()
-}
-
-function deleteItem(position1){
-    myList.splice(position1, 1) // Permite deletar dentro do array, informar posição e quantidade de itens
-    showTasks()
-}
-
-function rechargeTask(){
-    const taskLocalStorage = localStorage.getItem('list')
-
-    if(taskLocalStorage){ // So adiciona valor na myList se taskLocalStorage não estiver vazio.
-        myList=JSON.parse(taskLocalStorage) // JSON.parce trasnforma string em objeto.
-    }
-
-    showTasks()
-}
-
-function editTask(position1){
-    myList[position1].editing=true
-    showTasks()
-}
-
-function cancelEdit(position1){
-    myList[position1].editing=false
-    showTasks()
-}
-
-function saveEdit(position1) {
-    // Obter os valores dos inputs
-    const newTitle = document.getElementById(`editTitle-${position1}`).value;
-    const newDescription = document.getElementById(`editDescription-${position1}`).value;
-  
-    // Atualizar o array myList
-    myList[position1].title = newTitle;
-    myList[position1].description = newDescription;
-  
-    // Desativar o modo de edição
-    myList[position1].editing = false;
-  
-    // Atualizar a exibição
+// Marcar/desmarcar como completa
+async function completeTask(id, currentStatus) {
+    await fetchData(API_URL, 'PUT', {
+        id: id,
+        complete: !currentStatus
+    });
     showTasks();
-  }
+}
 
-
-
-rechargeTask()
-button.addEventListener('click', addNewTask) // Atribuindo 'valor' da nova tarefa ao clicar.
-
-taskTitleinput.addEventListener('keyup', function (event){   // Adicionando listeners de evento para "Enter";
-    if (event.key === 'Enter'){
-        addNewTask()
+// Excluir tarefa
+async function deleteItem(id) {
+    if (confirm('Tem certeza que deseja excluir esta tarefa?')) {
+        await fetchData(`${API_URL}?id=${id}`, 'DELETE');
+        showTasks();
     }
-})
+}
 
-taskDescriptionInput.addEventListener('keyup', function (event){    // Adicionando listeners de evento para "Enter".
-    if (event.key === 'Enter'){
-        addNewTask()
+// Editar tarefa
+function editTask(id) {
+    const taskElement = document.querySelector(`.task[data-id="${id}"]`);
+    taskElement.querySelector('div').innerHTML = `
+        <input type="text" id="editTitle-${id}" value="${taskElement.querySelector('h3').textContent}">
+        <textarea id="editDescription-${id}">${taskElement.querySelector('p').textContent}</textarea>
+        <button onclick="saveEdit(${id})">Salvar</button>
+        <button onclick="cancelEdit(${id})">Cancelar</button>
+    `;
+}
+
+// Cancelar edição
+function cancelEdit(id) {
+    showTasks();
+}
+
+// Salvar edição
+async function saveEdit(id) {
+    const newTitle = document.getElementById(`editTitle-${id}`).value.trim();
+    const newDescription = document.getElementById(`editDescription-${id}`).value.trim();
+    
+    if (newTitle === '') {
+        alert('O título não pode estar vazio');
+        return;
     }
-})
+    
+    await fetchData(API_URL, 'PUT', {
+        id: id,
+        title: newTitle,
+        description: newDescription,
+        complete: document.querySelector(`.task[data-id="${id}"]`).classList.contains('done')
+    });
+    
+    showTasks();
+}
+
+// Carregar tarefas ao iniciar
+showTasks();
+
+// Event listeners
+button.addEventListener('click', addNewTask);
+
+taskTitleinput.addEventListener('keyup', function(event) {
+    if (event.key === 'Enter') {
+        addNewTask();
+    }
+});
+
+taskDescriptionInput.addEventListener('keyup', function(event) {
+    if (event.key === 'Enter') {
+        addNewTask();
+    }
+});
