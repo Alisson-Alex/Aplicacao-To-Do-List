@@ -21,7 +21,7 @@ header('Access-Control-Allow-Headers: Content-Type'); // Cabeçalhos permitidos 
 
 // Configurações do Banco de Dados
 define('DB_HOST', 'localhost');
-define('DB_NAME', 'todo');
+define('DB_NAME', 'to-do');
 define('DB_USER', 'root');
 define('DB_PASS', '');
 
