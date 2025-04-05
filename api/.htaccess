@@ -1,0 +1,5 @@
+#MOTOR DE RESCRITURA
+RewriteEngine On
+
+#REGRAS DE RESCRITURA 
+RewriteRule ^tasks tasks.php [NC,L]

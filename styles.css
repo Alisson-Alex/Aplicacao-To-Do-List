@@ -1,119 +1,152 @@
-*{ /* Ações para todos os objetos. */
+/* Resetando o estilo para garantir consistência entre os navegadores */
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: "Roboto", sans-serif;
+    font-family: "Poppins", sans-serif;
     outline: none;
 }
-
-
-
-body{ /* Estabelece a imagem de fundo e parâmetros.*/
-    background: url("./img/backgroud.jpg");
+body {
+    background-color: #040314;
     background-size: cover;
     background-position: top;
-
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
 }
-
-nav { /* Barra superior */
+nav {
     width: 100%;
     text-align: center;
 }
-
-li{  /* Link da barra superior */
+li {
     list-style: none;
     display: inline-block;
     margin: 5px;
     margin-right: 10px;
 }
-
-img { /* Parâmetros para do icone 'Confirmar', 'Deletar' e 'Editar'.*/
+img {
     height: 30px;
-    
 }
-
-
-.navBox{ /* Caixa da barra superior */
+.navBox {
     display: flex;
     box-shadow: 1px 4px 10px rgba(53, 53, 53, 3.2);
-    width: 500px;
+    width: 100%;
+    max-width: 500px;
     border-radius: 10px;
     padding: 5px;
-    margin: 10px auto 0;
+    margin: 10px auto;
     background-color: #d1d1d1ce;
     flex-direction: column;
+    transition: all 0.3s ease;
+   /* Suaviza as transições para o navBox */
 }
-
-.nav-link { /* Inf. link da barra superior */
+.navBox nav {
+    display: flex;
+    justify-content: flex-end;
+   /* Alinha os itens à direita */
+    align-items: center;
+   /* Alinha verticalmente os itens */
+    width: 100%;
+    padding: 5px;
+}
+/* Ajusta o estilo da nav-link */
+.nav-link {
     cursor: pointer;
     text-decoration: none;
-    color: #000;
+    color: #333;
     font-size: 14px;
+    text-align: flex-start;
+   /* Garante que o texto no link seja centralizado */
+    transition: color 0.3s ease, box-shadow 0.3s ease;
+   /* Suaviza a transição de cor e box-shadow */
 }
-
-.nav-link:hover{ /* Inf. link da barra superior Cursor */
-    color:#e65f05;
+.nav-link i {
+    margin-left: 8px;
+   /* Espaçamento entre o texto e o ícone */
+    font-size: 18px;
+   /* Tamanho do ícone */
+}
+.nav-link:hover {
+    color: #e65f05;
     box-shadow: 0px 1px 0px #dd722a;
 }
-
-.nav-link:active{ /* Inf. link da barra superior Click */
+.nav-link:active {
     position: relative;
     opacity: 0.9;
-    
     top: 1px;
 }
-
-.input-container { /* Caixa de input (título e descrição) */
+.nav-title {
+    font-size: 1.5em;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 15px;
+   /* Espaço entre o título e o filtro */
+    text-align: center;
+}
+.input-container, .box-tasks {
     display: flex;
     box-shadow: 1px 4px 10px rgba(53, 53, 53, 3.2);
-    width: 500px;
+    width: 100%;
+    max-width: 500px;
     border-radius: 10px;
     padding: 20px;
-    margin: 10px auto 0;
+    margin: 10px auto;
     background-color: #d1d1d1ce;
     flex-direction: column;
+    transition: all 0.3s ease;
+   /* Suaviza a transição para os containers de input */
 }
-
-.box-tasks { /* Caixa de input (tarefas) */
-    display: flex;
-    box-shadow: 1px 4px 10px rgba(53, 53, 53, 3.2);
-    width: 500px;
-    border-radius: 10px;
-    padding: 20px;
-    margin: 10px auto 0;
-    background-color: #d1d1d1ce;
-    flex-direction: column;
-}
-
-.input-title,
-.input-description { /* Input título e descrição */
+.input-title, .input-description {
     border: none;
     border-radius: 5px;
     padding-left: 10px;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
     opacity: 60%;
+    transition: opacity 0.3s ease;
+   /* Suaviza a transição de opacidade */
 }
-
-.input-title { /* Parâmetros input título */
-    width: 100%; /* Ajuste a largura para acomodar o botão */
+.input-title {
+    width: 100%;
     height: 40px;
 }
-
-.input-description { /* Parâmetros input descrição */
+.input-description {
     width: 100%;
     height: 80px;
     resize: vertical;
-    
+    padding-left: 10px;
+    padding-top: 15px;
+   /* Ajusta a posição do placeholder para baixo */
+    opacity: 60%;
+    box-sizing: border-box;
 }
-
-.button-add-task { /* Parâmetros botão 'Adicionar'.*/
+.filter-select {
+    width: 120px;
+   /* Define um tamanho fixo para o select */
+    padding: 5px;
+    font-size: 14px;
+   /* Ajusta o tamanho da fonte */
+    border-radius: 5px;
+    color: #1f0c42;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+   /* Suaviza a transição do select */
+}
+.filter-select option {
+    padding: 10px;
+}
+.filter-select option:hover {
+    background-color: #e65f05;
+    color: #fff;
+}
+.button-add-task {
     position: relative;
-    box-shadow: 0px 5px 0px #83594d;
-    border: solid 1px #c95c3b;
+    box-shadow: 0px 5px 0px #524d83;
+    border: solid 1px #663bc9;
     border-radius: 5px;
     height: 40px;
-    width: 100px;
-    background-color: #e65f05;
+    width: 120px;
+    background-color: #202020;
     color: #ffffff;
     font-size: 17px;
     padding: 0 15px;
@@ -121,80 +154,56 @@ img { /* Parâmetros para do icone 'Confirmar', 'Deletar' e 'Editar'.*/
     cursor: pointer;
     font-weight: 700;
     align-self: flex-end;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+   /* Suaviza a transição de cor e transformação */
 }
-
-.button-add-task:hover { /* Opacidade do botão 'Adicionar' ao passar o cursor .*/
-    background-color: #ec7221; 
+.button-add-task:hover {
+    background-color: #252525b2;
 }
-
-.button-add-task:active { /*Efeito de click no botão 'Adicionar'.*/
+.button-add-task:active {
     position: relative;
     opacity: 0.6;
     box-shadow: 0px 1px 0px #772b08;
     top: 5px;
 }
-
-.list-tasks { /* Parâmetros para a lista.*/
+.list-tasks {
     resize: vertical;
     width: 100%;
     height: auto;
     list-style: none;
     margin-top: 20px;
 }
-
-
-
-.task input[type="text"],   /* Parâmetros para editar input.*/
-.task textarea{
+.task input[type="text"], .task textarea {
     width: 100%;
     padding: 8px;
     margin-top: 10px;
-    border-bottom: 8px;
     border: none;
     border-radius: 5px;
     box-sizing: border-box;
     resize: vertical;
+    transition: border-color 0.3s ease;
+   /* Suaviza a transição da borda */
 }
-
-
-
-.task button:last-child { /* ?????????????????????????? */
+.task button:last-child {
     margin-right: 0;
 }
-
-.task button:nth-child(3) { /* Parâmetros do botão salvar do editor input.*/
-    box-shadow: 0px 5px 0px #83594d;
-    border: solid 1px #c95c3b;
+.task button:nth-child(3), .task button:nth-child(4) {
+    box-shadow: 0px 5px 0px #524d83;
+    border: solid 1px #663bc9;
     border-radius: 5px;
-    height: 20px;
+    height: 4vh;
     width: 100px;
-    background-color: #e65f05;
+    background-color: #202020;
     color: #ffffff;
     font-size: 15px;
     padding: 0 15px;
-    float: left;
     cursor: pointer;
     font-weight: 700;
     align-self: flex-end;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+   /* Suaviza a transição de cor e transformação */
 }
-
-.task button:nth-child(4) {  /* Parâmetros do botão cancelar do editor input.*/
-    box-shadow: 0px 5px 0px #83594d;
-    border: solid 1px #c95c3b;
-    border-radius: 5px;
-    height: 20px;
-    width: 100px;
-    background-color: #e65f05;
-    color: #ffffff;
-    font-size: 15px;
-    padding: 0 15px;
-    float: right;
-    cursor: pointer;
-    font-weight: 700;
-    align-self: flex-end;
-}
-
-.task { /* Parâmetros para cada item da lista.*/
+.task {
     background-color: #ffffffa6;
     box-shadow: 1px 4px 10px rgba(0, 0, 0, 0.2);
     min-height: 70px;
@@ -204,78 +213,63 @@ img { /* Parâmetros para do icone 'Confirmar', 'Deletar' e 'Editar'.*/
     border-radius: 5px;
     margin-bottom: 20px;
     cursor: pointer;
-    padding: 10 15px;
-    
+    padding: 10px 15px;
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+   /* Suaviza a transição da sombra e transformação */
 }
-
-.task div {  /* Parâmetros para cada item da lista.*/
-    flex-grow: 1; /* Permite a caixa do título/descrição cresça para ocupar o espaço disponível */
-    margin-left: 10px; /* Adicione margem à esquerda para separar da imagem */
-    margin-right: 10px; /* Adicione margem à direita para separar da imagem */
-    max-width: calc(100% - 130px); /* Definir largura máxima para o texto */
-  }
-
+.task div {
+    flex-grow: 1;
+    margin-left: 10px;
+    margin-right: 10px;
+    max-width: calc(100% - 130px);
+}
 .task h3 {
     margin: 0;
-    font-size: 1.1em; /* Ajuste o tamanho da fonte do título */
-    word-wrap: break-word; /* Adicionado para garantir quebra em todos os navegadores */
-    overflow-wrap: break-word; /* Adicionado para garantir quebra em todos os navegadores */
+    font-size: 1.1em;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
-
 .task p {
     margin: 5px 0 10px;
-    font-size: 0.9em; /* Ajuste o tamanho da fonte da descrição */
-    color: #474747; /* Cor da descrição */
+    font-size: 0.9em;
+    color: #474747;
     word-wrap: break-word;
-    overflow-wrap: break-word; /* Adicionado para garantir quebra em todos os navegadores */
-
+    overflow-wrap: break-word;
 }
-
 .task img {
     align-items: baseline;
-    
-
+    transition: transform 0.3s ease;
+   /* Suaviza a transição do efeito de zoom */
 }
-
-.task img:hover { /* Cria um efeito ao passar o cursor*/
-    transform: scale(120%); 
-    
+.task img:hover {
+    transform: scale(120%);
 }
-
-.done { /* Adiciona a cor verde e linha na tarefa concluída. */
+.done {
     filter: opacity(60%);
     text-decoration: line-through;
 }
-
 @media (max-width: 600px) {
-    .navBox{
-        width: 400px;
-    }
-
-    .input-container {
-        width: 400px;
-    }
-
-    .box-tasks {
-        width: 400px;
-    }
-
+    .navBox, .input-container, .box-tasks {
+        width: 90%;
+   }
     .container {
-        width: 90%; /* Ajuste a largura do contêiner para telas menores */
-    }
-  
+        width: 90%;
+   }
     .input-task {
-        width: 100%; /* Ajuste a largura do campo de entrada para telas menores */
-    }
-  
-    .button-add-task {
-        width: 50%; /* Ajuste a largura do botão para telas menores */
-    }
-
-    .task input[type="text"],
-    .task textarea,
-    .task button {
         width: 100%;
-        
-    }
-  }
+   }
+    .button-add-task {
+        width: 50%;
+   }
+    .task input[type="text"], .task textarea, .task button {
+        width: 100%;
+   }
+}
+#particles-js {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}

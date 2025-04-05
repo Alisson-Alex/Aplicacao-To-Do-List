@@ -1,74 +1,83 @@
-const button = document.querySelector('.button-add-task');
-const taskTitleinput = document.getElementById('taskTitle');
-const taskDescriptionInput = document.getElementById('taskDescription');
-const listComplete = document.querySelector('.list-tasks');
+const botaoAdicionar = document.querySelector('.button-add-task');
+const campoTituloTarefa = document.getElementById('taskTitle');
+const campoDescricaoTarefa = document.getElementById('taskDescription');
+const listaTarefas = document.querySelector('.list-tasks');
+const seletorFiltro = document.getElementById('filterSelect');  // Captura o select
 
 // URLs da API
-const API_URL = 'PHP/tasks.php';
+const URL_API = 'api/tasks';
 
 // Função para fazer requisições à API
-async function fetchData(url, method = 'GET', data = null) {
-    const options = {
-        method,
+async function buscarDados(url, metodo, dados = null) {
+    const opcoes = {
+        method: metodo,
         headers: {
             'Content-Type': 'application/json',
         },
     };
     
-    if (data) {
-        options.body = JSON.stringify(data);
+    if (dados) {
+        opcoes.body = JSON.stringify(dados);
     }
     
     try {
-        const response = await fetch(url, options);
-        return await response.json();
-    } catch (error) {
-        console.error('Erro na requisição:', error);
+        const resposta = await fetch(url, opcoes);
+        return await resposta.json();
+    } catch (erro) {
+        console.error('Erro na requisição:', erro);
         return null;
     }
 }
 
 // Adicionar nova tarefa
-async function addNewTask() {
-    const taskTitle = taskTitleinput.value.trim();
-    const taskDescription = taskDescriptionInput.value.trim();
+async function adicionarNovaTarefa() {
+    const tituloTarefa = campoTituloTarefa.value.trim();
+    const descricaoTarefa = campoDescricaoTarefa.value.trim();
 
-    if (taskTitle === '') {
-        alert('Por favor, insira um título para a tarefa.');
+    if (tituloTarefa === '') {
+        Swal.fire('Erro', 'Por favor, insira um título para a tarefa.', 'error');
         return;
     }
     
-    const newTask = await fetchData(API_URL, 'POST', {
-        title: taskTitle,
-        description: taskDescription
+    const novaTarefa = await buscarDados(URL_API, 'POST', {
+        title: tituloTarefa,
+        description: descricaoTarefa
     });
     
-    if (newTask) {
-        taskTitleinput.value = '';
-        taskDescriptionInput.value = '';
-        showTasks();
+    if (novaTarefa) {
+        campoTituloTarefa.value = '';
+        campoDescricaoTarefa.value = '';
+        mostrarTarefas();
     }
 }
 
 // Mostrar tarefas
-async function showTasks() {
-    const tasks = await fetchData(API_URL);
+async function mostrarTarefas(filtro) {
+    const tarefas = await buscarDados(URL_API);
     
-    if (!tasks) return;
+    if (!tarefas) return;
     
-    let newLi = '';
+    // Filtrando as tarefas com base no valor do filtro
+    let tarefasFiltradas = tarefas;
+    if (filtro === '0') { // Pendente
+        tarefasFiltradas = tarefas.filter(tarefa => tarefa.status === 0); // Filtra status = 0 (pendente)
+    } else if (filtro === '1') { // Concluída
+        tarefasFiltradas = tarefas.filter(tarefa => tarefa.status === 1); // Filtra status = 1 (completa)
+    }
     
-    tasks.forEach((item) => {
-        newLi += `
-            <li class="task ${item.complete && "done"}" data-id="${item.id}">   
+    let novaLi = '';
+    
+    tarefasFiltradas.forEach((item) => {
+        novaLi += `
+            <li class="task ${item.status === 1 && "done"}" data-id="${item.id}">   
                 <div>
                     ${
                         item.editing
                             ? `
-                                <input type="text" id="editTitle-${item.id}" value="${item.title}">
-                                <textarea id="editDescription-${item.id}">${item.description}</textarea>
-                                <button onclick="saveEdit(${item.id})">Salvar</button>
-                                <button onclick="cancelEdit(${item.id})">Cancelar</button>
+                                <input type="text" id="editTitle-${item.id}" value="${item.title}" class="fade-in-input">
+                                <textarea id="editDescription-${item.id}" class="fade-in-input">${item.description}</textarea>
+                                <button onclick="salvarEdicao(${item.id})">Salvar</button>
+                                <button onclick="cancelarEdicao(${item.id})">Cancelar</button>
                             `
                             : `
                                 <h3>${item.title}</h3>
@@ -76,83 +85,176 @@ async function showTasks() {
                             `
                     }
                 </div>
-                <img src="./img/confirm1.png" alt="check-na-tarefa" onclick="completeTask(${item.id}, ${item.complete})">
-                <img src="./img/edit-icon.png" alt="editar-tarefa" onclick="editTask(${item.id})">
-                <img src="./img/delete1.png" alt="tarefa-para-lixo" onclick="deleteItem(${item.id})">
+                ${item.status === 1 ? '' : `<img src="./img/confirm1.png" alt="check-na-tarefa" onclick="completarTarefa(${item.id}, ${item.status})">`}
+                <img src="./img/edit-icon.png" alt="editar-tarefa" onclick="editarTarefa(${item.id})">
+                <img src="./img/delete1.png" alt="tarefa-para-lixo" onclick="deletarItem(${item.id})">
             </li>            
         `;
     });
     
-    listComplete.innerHTML = newLi;
+    listaTarefas.innerHTML = novaLi;
+
+    // Adicionar a classe 'visible' para os inputs de fade-in
+    const fadeInInputs = document.querySelectorAll('.fade-in-input');
+    fadeInInputs.forEach(input => {
+        input.classList.add('visible');
+    });
 }
 
 // Marcar/desmarcar como completa
-async function completeTask(id, currentStatus) {
-    await fetchData(API_URL, 'PUT', {
+async function completarTarefa(id, statusAtual) {
+    await buscarDados(URL_API, 'PUT', {
         id: id,
-        complete: !currentStatus
+        complete: !statusAtual
     });
-    showTasks();
+    mostrarTarefas(seletorFiltro.value); // Atualiza as tarefas com o filtro atual
 }
 
 // Excluir tarefa
-async function deleteItem(id) {
-    if (confirm('Tem certeza que deseja excluir esta tarefa?')) {
-        await fetchData(`${API_URL}?id=${id}`, 'DELETE');
-        showTasks();
+async function deletarItem(id) {
+    const resultado = await Swal.fire({
+        title: 'Tem certeza?',
+        text: 'Você não poderá reverter isso!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sim, excluir!',
+        cancelButtonText: 'Cancelar'
+    });
+
+    if (resultado.isConfirmed) {
+        await buscarDados(`${URL_API}?id=${id}`, 'DELETE');
+        Swal.fire('Deletado!', 'A tarefa foi excluída.', 'success');
+        mostrarTarefas(seletorFiltro.value); // Atualiza as tarefas com o filtro atual
     }
 }
 
 // Editar tarefa
-function editTask(id) {
-    const taskElement = document.querySelector(`.task[data-id="${id}"]`);
-    taskElement.querySelector('div').innerHTML = `
-        <input type="text" id="editTitle-${id}" value="${taskElement.querySelector('h3').textContent}">
-        <textarea id="editDescription-${id}">${taskElement.querySelector('p').textContent}</textarea>
-        <button onclick="saveEdit(${id})">Salvar</button>
-        <button onclick="cancelEdit(${id})">Cancelar</button>
+function editarTarefa(id) {
+    const tarefaElemento = document.querySelector(`.task[data-id="${id}"]`);
+    tarefaElemento.querySelector('div').innerHTML = `
+        <input type="text" id="editTitle-${id}" value="${tarefaElemento.querySelector('h3').textContent}" class="fade-in-input">
+        <textarea id="editDescription-${id}" class="fade-in-input">${tarefaElemento.querySelector('p').textContent}</textarea>
+        <button onclick="salvarEdicao(${id})">Salvar</button>
+        <button onclick="cancelarEdicao(${id})">Cancelar</button>
     `;
+
+    // Adiciona a classe 'visible' para o efeito de fade-in no campo de edição
+    const fadeInInputs = tarefaElemento.querySelectorAll('.fade-in-input');
+    fadeInInputs.forEach(input => {
+        input.classList.add('visible');
+    });
 }
 
 // Cancelar edição
-function cancelEdit(id) {
-    showTasks();
+function cancelarEdicao(id) {
+    mostrarTarefas(seletorFiltro.value); // Atualiza as tarefas com o filtro atual
 }
 
 // Salvar edição
-async function saveEdit(id) {
-    const newTitle = document.getElementById(`editTitle-${id}`).value.trim();
-    const newDescription = document.getElementById(`editDescription-${id}`).value.trim();
+async function salvarEdicao(id) {
+    const novoTitulo = document.getElementById(`editTitle-${id}`).value.trim();
+    const novaDescricao = document.getElementById(`editDescription-${id}`).value.trim();
     
-    if (newTitle === '') {
-        alert('O título não pode estar vazio');
+    if (novoTitulo === '') {
+        Swal.fire('Erro', 'O título não pode estar vazio', 'error');
         return;
     }
     
-    await fetchData(API_URL, 'PUT', {
+    await buscarDados(URL_API, 'PUT', {
         id: id,
-        title: newTitle,
-        description: newDescription,
+        title: novoTitulo,
+        description: novaDescricao,
         complete: document.querySelector(`.task[data-id="${id}"]`).classList.contains('done')
     });
     
-    showTasks();
+    mostrarTarefas(seletorFiltro.value); // Atualiza as tarefas com o filtro atual
 }
 
 // Carregar tarefas ao iniciar
-showTasks();
+mostrarTarefas();
 
 // Event listeners
-button.addEventListener('click', addNewTask);
+botaoAdicionar.addEventListener('click', adicionarNovaTarefa);
 
-taskTitleinput.addEventListener('keyup', function(event) {
+campoTituloTarefa.addEventListener('keyup', function(event) {
     if (event.key === 'Enter') {
-        addNewTask();
+        adicionarNovaTarefa();
     }
 });
 
-taskDescriptionInput.addEventListener('keyup', function(event) {
+campoDescricaoTarefa.addEventListener('keyup', function(event) {
     if (event.key === 'Enter') {
-        addNewTask();
+        adicionarNovaTarefa();
     }
+});
+
+// Adicionando o evento para o select
+seletorFiltro.addEventListener('change', function() {
+    mostrarTarefas(seletorFiltro.value); // Atualiza as tarefas com o filtro selecionado
+});
+
+// Configuração do Particles.js
+particlesJS("particles-js", {
+    particles: {
+        number: {
+            value: 100,
+            density: {
+                enable: true,
+                value_area: 800
+            }
+        },
+        color: {
+            value: "#ffffff"
+        },
+        shape: {
+            type: "circle",
+            stroke: {
+                width: 0,
+                color: "#000000"
+            }
+        },
+        opacity: {
+            value: 0.5,
+            random: true,
+            anim: {
+                enable: true,
+                speed: 1,
+                opacity_min: 0.1,
+                sync: false
+            }
+        },
+        size: {
+            value: 3,
+            random: true,
+            anim: {
+                enable: false
+            }
+        },
+        line_linked: {
+            enable: false,
+        },
+        move: {
+            enable: true,
+            speed: 1,
+            direction: "none",
+            random: true,
+            straight: false,
+            out_mode: "out",
+            attract: {
+                enable: false
+            }
+        }
+    },
+    interactivity: {
+        detect_on: "canvas",
+        events: {
+            onhover: {
+                enable: false,
+            },
+            onclick: {
+                enable: false,
+            }
+        }
+    },
+    retina_detect: true
 });

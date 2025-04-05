@@ -5,37 +5,51 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">   <!-- Indica para o arquivo CSS a localização do estilo-->
+    <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap" rel="stylesheet">
-    <title>Aplicação To-Do List</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet">
+    <title>Desafio To-Do List</title>
+    <script src="https://cdn.jsdelivr.net/npm/particles.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/iconoir-icons/iconoir@main/css/iconoir.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 </head>
 
 <body>
+    <div id="particles-js"></div>
+
     <div class="navBox">
+        <!-- Título adicionado aqui -->
+        <h2 class="nav-title">Lista de Tarefas</h2>
         <nav>
             <ul>
-                <li><a class="nav-link">Exibir</a></li>
-                <li><a class="nav-link">Pendente</a></li>
-                <li><a class="nav-link">Concluída</a></li>
+                <label for="filterSelect" class="nav-link">
+                    Filtrar por status
+                    <i class="iconoir-long-arrow-down-right"></i>
+                </label>
+                <select id="filterSelect" class="filter-select">
+                    <option value="all">Todas Tarefas</option>
+                    <option value="0">Pendente</option>
+                    <option value="1">Concluída</option>
+                </select>
             </ul>
         </nav>
     </div>
-    <div class="input-container">   <!--'<div>' Caixa de itens-->
+
+    <div class="input-container">
         <ul>
-            <input type="text" id="taskTitle" placeholder="Título da tarefa..." class="input-title">   <!-- Texto de título fantasma -->
-            <textarea id="taskDescription" placeholder="Descrição da tarefa (opcional)..." class="input-description"></textarea>   <!-- Texto de descrição fantasma -->
-            <button class="button-add-task">Adicionar</button>   <!-- Classe botão 'Adicionar' -->
+            <input type="text" id="taskTitle" placeholder="Título da tarefa..." class="input-title">
+            <textarea id="taskDescription" placeholder="Descrição da tarefa..." class="input-description"></textarea>
+            <button class="button-add-task">Adicionar</button>
         </ul>
     </div>
-    
+
     <div class="box-tasks">
-        <ul class="list-tasks"></ul> <!--Cria uma lista-->
+        <ul class="list-tasks"></ul>
     </div>
 
-   
+    <script src="scripts.js"></script>
 </body>
-<script src="scripts.js"></script>   <!-- Caminho do arquivo JS-->
-</html>
 
+</html>
